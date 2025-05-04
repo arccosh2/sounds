@@ -60,7 +60,7 @@ const Sphere = () => {
         uniform float audioLevel;
         
         void main() {
-          float wave = sin(position.x * 2.0 + time) * audioLevel;
+          float wave = sin(position.x * 2.0 + time) * audioLevel * 0.6;
           vec3 newPosition = position;
           newPosition.y += wave;
           
@@ -102,7 +102,7 @@ const Sphere = () => {
         />
       </points>
 
-      <Text color="#cfb7d6" fontSize={1.6}>
+      <Text color="#cfb7d6" fontSize={1.6} letterSpacing={0.1}>
         Sounds
       </Text>
     </>
