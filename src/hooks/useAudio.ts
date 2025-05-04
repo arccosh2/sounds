@@ -1,36 +1,54 @@
 import { useEffect, useRef, useState } from 'react';
 
+// AudioContextの型定義を追加
+declare global {
+  interface Window {
+    webkitAudioContext: typeof AudioContext;
+  }
+}
+
 export const useAudio = () => {
   const [audioLevel, setAudioLevel] = useState(0);
-  const analyserRef = useRef<AnalyserNode | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   useEffect(() => {
+    let animationFrameId: number;
+
     const setupAudio = async () => {
       try {
-        const audioContext = new AudioContext();
+        // AudioContextの初期化
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        audioContextRef.current = audioContext;
 
-        // マイクから音声を取得
+        // マイクストリームの取得
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
         const source = audioContext.createMediaStreamSource(stream);
 
-        // 音声データを分析
+        // アナライザーの設定
         const analyser = audioContext.createAnalyser();
         analyser.fftSize = 64;
-        analyserRef.current = analyser;
         source.connect(analyser);
 
-        // 周波数データを取得
-        const frequencyArray = new Uint8Array(analyser.frequencyBinCount);
-
+        // 音声データの更新
         const updateAudioData = () => {
+          const frequencyArray = new Uint8Array(analyser.frequencyBinCount);
           analyser.getByteFrequencyData(frequencyArray);
+
           const average =
             frequencyArray.reduce((a, b) => a + b, 0) / frequencyArray.length;
           setAudioLevel(average / 255);
-          requestAnimationFrame(updateAudioData);
+
+          animationFrameId = requestAnimationFrame(updateAudioData);
         };
+
+        // 音声処理の開始
+        if (audioContext.state === 'suspended') {
+          await audioContext.resume();
+        }
+
         updateAudioData();
       } catch (error) {
         console.error('Failed to access microphone:', error);
@@ -38,6 +56,13 @@ export const useAudio = () => {
     };
 
     setupAudio();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
   }, []);
 
   return { audioLevel };
