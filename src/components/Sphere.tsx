@@ -60,8 +60,7 @@ const Sphere = () => {
         uniform float audioLevel;
         
         void main() {
-          // 波の動きを計算
-          float wave = sin(position.x * 2.0 + time) * 0.5 * audioLevel;
+          float wave = sin(position.x * 2.0 + time) * audioLevel;
           vec3 newPosition = position;
           newPosition.y += wave;
           
