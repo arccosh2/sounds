@@ -51,10 +51,6 @@ const Sphere = () => {
     return positions;
   }, []);
 
-  const viewPortWidth = useMemo(() => {
-    return viewport.width;
-  }, [viewport]);
-
   const shaderMaterial = useMemo(() => {
     return new ShaderMaterial({
       uniforms: {
@@ -108,7 +104,7 @@ const Sphere = () => {
         />
       </points>
 
-      <Text color="#cfb7d6" fontSize={viewPortWidth / 10} letterSpacing={0.1}>
+      <Text color="#cfb7d6" fontSize={viewport.width / 10} letterSpacing={0.1}>
         Sounds
       </Text>
     </>
