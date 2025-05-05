@@ -4,7 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 
 const Scene = () => {
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0 w-full h-full">
       <Canvas
         camera={{
           position: [0, 0, 5],
