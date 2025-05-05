@@ -5,9 +5,11 @@ import Scene from './components/Scene';
 
 function App() {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="grid grid-rows-[auto_1fr_auto] h-screen">
       <Header />
-      <Scene />
+      <div className="relative">
+        <Scene />
+      </div>
       <Footer />
     </div>
   );

@@ -4,10 +4,19 @@ import { OrbitControls } from '@react-three/drei';
 
 const Scene = () => {
   return (
-    <Canvas>
-      <OrbitControls makeDefault />
-      <Sphere />
-    </Canvas>
+    <div className="absolute inset-0 w-full h-full">
+      <Canvas
+        camera={{
+          position: [0, 0, 5],
+          fov: 75,
+          near: 0.1,
+          far: 1000,
+        }}
+      >
+        <OrbitControls makeDefault />
+        <Sphere />
+      </Canvas>
+    </div>
   );
 };
 
