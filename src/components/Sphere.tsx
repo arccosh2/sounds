@@ -2,11 +2,13 @@ import { Text } from '@react-three/drei';
 import { useMemo, useRef, useEffect } from 'react';
 import { ShaderMaterial } from 'three';
 import { useAudio } from '../hooks/useAudio';
+import { useThree } from '@react-three/fiber';
 
 const Sphere = () => {
   const materialRef = useRef<ShaderMaterial>(null);
   const timeRef = useRef(0);
   const { audioLevel } = useAudio();
+  const { viewport } = useThree();
 
   useEffect(() => {
     let animationFrameId: number;
@@ -26,9 +28,9 @@ const Sphere = () => {
   }, [audioLevel]);
 
   const spherePositions = useMemo(() => {
-    const particleCount = 2000;
+    const particleCount = 1500;
     const positions = new Float32Array(particleCount * 3);
-    const radius = 1.6;
+    const radius = 1.5;
 
     for (let i = 0; i < particleCount; i++) {
       // 球面座標系でランダムな位置を生成
@@ -102,7 +104,7 @@ const Sphere = () => {
         />
       </points>
 
-      <Text color="#cfb7d6" fontSize={1.6} letterSpacing={0.1}>
+      <Text color="#cfb7d6" fontSize={viewport.width / 10} letterSpacing={0.1}>
         Sounds
       </Text>
     </>
